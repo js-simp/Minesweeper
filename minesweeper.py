@@ -158,25 +158,43 @@ class boardClass(object):
         [(0,1), (1,0), (1,1)] )
         """
         pass
-        # criticism: the four inputs have no validation at the moment
+
+def validate_coordinates_range(x, y, board_size):
+    """Validate whether the (x, y) coordinates are in range.
+
+    Args:
+        x (int): the 'x' coordinate
+        y (int): the 'y' coordinate
+        board_size (int): the size of the board
+
+    Returns:
+        int, int: validated (x,y) coordinates
+    """
+    while x < 0 or x >= board_size or y < 0 or y >= board_size:
+        print("Invalid coordinates. Please choose coordinates within the board range.")
+        x = int(input("x: "))
+        y = int(input("y: "))
+    return x, y
+
 def playGame():
-    boardSize = int(input("Choose the width of the board: "))
+    board_size = int(input("Choose the width of the board: "))
     numMines = int(input("Choose the number of mines: "))
-    gameOver = False
+    game_over = False
     winner = False
-    # criticism: object should not begin with capital letter
-    Board = boardClass(boardSize, numMines)
-    while not gameOver:
-        print(Board)
+
+    board = boardClass(board_size, numMines)
+    while not game_over:
+        print(board)
         print("Make your move:")
         x = int(input("x: "))
         y = int(input("y: "))
-        Board.makeMove(x, y)
-        gameOver = Board.hitMine(x, y)
-        if Board.isWinner() and gameOver == False:
-            gameOver = True
+        x, y = validate_coordinates_range(x, y, board_size)
+        board.makeMove(x, y)
+        game_over = board.hitMine(x, y)
+        if board.isWinner() and game_over == False:
+            game_over = True
             winner = True
-    print(Board)
+    print(board)
     if winner:
         print("Congratulations, You Win!")
     else:
