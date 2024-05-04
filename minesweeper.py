@@ -2,25 +2,28 @@ import random
 
 # criticism: the prefix board is redundant
 class boardSpot(object):
-    # criticism: these three class variables are redundant
-    value = 0
-    selected = False
-    mine = False
     def __init__(self):
-        self.selected = False
+        self.is_selected = False
+        self.is_mine = False
+        self.count = 0
+
     def __str__(self):
-        # criticism: value is a poor uninformative variable name
-        return str(boardSpot.value)
+        if self.is_selected:
+            if self.is_mine:
+                return "*"
+            else:
+                return str(self.count)
+        else:
+            return " "
+
     def isMine(self):
+        """Determines whether or not the board spot contains a mine.
+
+        Returns:
+            bool:  `True` if and only if the spot has a mine
         """
-        Determines whether or not the board spot contains a mine
-        :return: True if and only if the spot has a mine
-        """
-        # criticism: -1 is a magic number
-        # criticism: this function should be written more compactly in any case
-        if boardSpot.value == -1:
-            return True
-        return False
+        return self.is_mine
+
 # criticism: the suffix Class is redundant
 class boardClass(object):
     # criticism: the convention of using prefix m_ to indicate method parameters is no longer used
@@ -39,7 +42,7 @@ class boardClass(object):
         while i < m_numMines:
             x = random.randint(0, self.boardSize-1)
             y = random.randint(0, self.boardSize-1)
-            if not self.board[x][y].mine:
+            if not self.board[x][y].is_mine:
                 self.addMine(x, y)
                 i += 1
     def __str__(self):
@@ -63,10 +66,10 @@ class boardClass(object):
         for y in range(0, self.boardSize):
             returnString += str(y)
             for x in range(0, self.boardSize):
-                if self.board[x][y].mine and self.board[x][y].selected:
+                if self.board[x][y].is_mine and self.board[x][y].is_selected:
                     returnString += " |" + " *"
-                elif self.board[x][y].selected:
-                    returnString += " | " + str(self.board[x][y].value)
+                elif self.board[x][y].is_selected:
+                    returnString += " | " + str(self.board[x][y].count)
                 else:
                     returnString += " | "
             returnString += " |"
@@ -78,24 +81,24 @@ class boardClass(object):
         :param x: the x-component of the coordinate
         :param y: the y-component of the coordinate
         :return: no value is returned"""
-        self.board[x][y].value = -1
-        self.board[x][y].mine = True
+        self.board[x][y].count = -1
+        self.board[x][y].is_mine = True
         # examine cells to the left, middle and right, relative to (x,y)
         for i in range(x-1, x+2):
             # make sure cell is not too far to the left or right
             if i >= 0 and i < self.boardSize:
                 # if the three cells above (x,y) are on the board and not mines, increment their value
-                if y-1 >= 0 and not self.board[i][y-1].mine:
-                     self.board[i][y-1].value += 1
+                if y-1 >= 0 and not self.board[i][y-1].is_mine:
+                     self.board[i][y-1].count += 1
         # if the three cells below (x,y) are on the board and not mines, increment their value
-                if y+1 < self.boardSize and not self.board[i][y+1].mine:
-                    self.board[i][y+1].value += 1
+                if y+1 < self.boardSize and not self.board[i][y+1].is_mine:
+                    self.board[i][y+1].count += 1
                 # if cell to the left of (x,y) is on the board and not a mine, increment its value
-        if x-1 >= 0 and not self.board[x-1][y].mine:
-            self.board[x-1][y].value += 1
+        if x-1 >= 0 and not self.board[x-1][y].is_mine:
+            self.board[x-1][y].count += 1
                 # if cell to the of (x,y) right is on the board and not a mine, increment its value
-        if x+1 < self.boardSize and not self.board[x+1][y].mine:
-            self.board[x+1][y].value += 1
+        if x+1 < self.boardSize and not self.board[x+1][y].is_mine:
+            self.board[x+1][y].count += 1
     def makeMove(self, x, y):
         """
         step on the cell at the requested component and reveal whether the player is still alive
@@ -104,27 +107,27 @@ class boardClass(object):
         :return: True if and only if (x,y) did not have a mine
         """
         # select the cell and return false if a mine has been stepped on (all other paths return True)
-        self.board[x][y].selected = True
+        self.board[x][y].is_selected = True
         self.selectableSpots -= 1
-        if self.board[x][y].value == -1:
+        if self.board[x][y].count == -1:
             return False
         # if there are no mines around (x,y)
-        if self.board[x][y].value == 0:
+        if self.board[x][y].count == 0:
             # examine cells to the left, centre and right of (x,y)
             for i in range(x-1, x+2):
                 # make sure cell is not too far to the left or right
                 if i >= 0 and i < self.boardSize:
                     # if the three cells above (x,y) are on the board and not selected, visit them
-                    if y-1 >= 0 and not self.board[i][y-1].selected:
+                    if y-1 >= 0 and not self.board[i][y-1].is_selected:
                         self.makeMove(i, y-1)
                     # if the three cells below (x,y) are on the board and not selected, visit them
-                    if y+1 < self.boardSize and not self.board[i][y+1].selected:
+                    if y+1 < self.boardSize and not self.board[i][y+1].is_selected:
                         self.makeMove(i, y+1)
                 # if the cell to the left of (x,y) is on the board and not selected, visit it
-            if x-1 >= 0 and not self.board[x-1][y].selected:
+            if x-1 >= 0 and not self.board[x-1][y].is_selected:
                 self.makeMove(x-1, y)
                 # if the cell to the right of (x,y) is on the board and not selected, visit it
-            if x+1 < self.boardSize and not self.board[x+1][y].selected:
+            if x+1 < self.boardSize and not self.board[x+1][y].is_selected:
                 self.makeMove(x+1, y)
         # only False case is when value is -1 and that was detailed above
             return True
@@ -137,7 +140,7 @@ class boardClass(object):
         :param y: the y-component of the location
         :return: True if and only if (x,y) is a mine
         """
-        return self.board[x][y].value == -1
+        return self.board[x][y].count == -1
     def isWinner(self):
         """
         reveals whether the player has won
@@ -187,7 +190,7 @@ def validate_unselected(x, y, board):
     Returns:
         int, int: validated (x,y) coordinates
     """
-    while board[x][y].selected:
+    while board[x][y].is_selected:
         print("Spot already selected. Please choose an unselected spot.")
         x = int(input("x: "))
         y = int(input("y: "))
