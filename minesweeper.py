@@ -193,14 +193,51 @@ def validate_unselected(x, y, board):
         y = int(input("y: "))
     return x, y
 
+def validate_board_width(width):
+    """Validate the board width.
+
+    Args:
+        width (int): width of the board
+
+    Returns:
+        int: validated board width
+    """
+    while width < 3:
+        print("Board width should be at least 3 for a playable game.")
+        width = int(input("Choose the width of the board: "))
+    return width
+
+
+
+def validate_num_mines(num_mines, board_size):
+    """Validate the number of mines requested.
+
+    Args:
+        num_mines (int): number of mines entered by the player
+        board_size (int): size of the board
+
+    Returns:
+        int: validated number of mines
+    """
+    while num_mines >= board_size * board_size:
+        print("Number of mines should be less than the total number of spots on the board.")
+        num_mines = int(input("Choose the number of mines: "))
+    return num_mines
+
 
 def playGame():
+    # Get the board width from user input and validate
     board_size = int(input("Choose the width of the board: "))
-    numMines = int(input("Choose the number of mines: "))
+    board_size = validate_board_width(board_size)
+
+    # Get the number of mines from user input and validate
+    num_mines = int(input("Choose the number of mines: "))
+    num_mines = validate_num_mines(num_mines, board_size)
+
     game_over = False
     winner = False
 
-    board = boardClass(board_size, numMines)
+    board = boardClass(board_size, num_mines)
     while not game_over:
         print(board)
         print("Make your move:")
