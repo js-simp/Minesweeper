@@ -25,7 +25,16 @@ class TestMinesweeper(unittest.TestCase):
         self.assertEqual(board.board[3][2].value, 1)
         self.assertEqual(board.board[3][3].value, 1)
 
+    def test_makeMove_mine_hit(self):
+        """Test whether the `makeMove` function returns false when a mine is hit.
+        """
 
+        # Create test board and add a mine at position (2, 2)
+        board = boardClass(5, 0)
+        board.addMine(2, 2)
+
+        # Assert that makeMove returns False when hitting a mine
+        self.assertFalse(board.makeMove(2, 2))
 
 if __name__ == '__main__':
     unittest.main()
