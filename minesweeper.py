@@ -90,28 +90,27 @@ class boardClass(object):
         return column_headings
     def addMine(self, x, y):
         """
-        add a mine to the board at the requested coordinate
-        :param x: the x-component of the coordinate
-        :param y: the y-component of the coordinate
-        :return: no value is returned"""
+        Add a mine to the board at the specified coordinate and update neighboring cells.
+
+        Args:
+            x (int): The x-component of the coordinate.
+            y (int): The y-component of the coordinate.
+
+        Returns:
+            None
+        """
+
+        # Set the value of the spot at (x, y) to indicate a mine
         self.board[x][y].count = -1
         self.board[x][y].is_mine = True
-        # examine cells to the left, middle and right, relative to (x,y)
-        for i in range(x-1, x+2):
-            # make sure cell is not too far to the left or right
-            if i >= 0 and i < self.boardSize:
-                # if the three cells above (x,y) are on the board and not mines, increment their value
-                if y-1 >= 0 and not self.board[i][y-1].is_mine:
-                     self.board[i][y-1].count += 1
-        # if the three cells below (x,y) are on the board and not mines, increment their value
-                if y+1 < self.boardSize and not self.board[i][y+1].is_mine:
-                    self.board[i][y+1].count += 1
-                # if cell to the left of (x,y) is on the board and not a mine, increment its value
-        if x-1 >= 0 and not self.board[x-1][y].is_mine:
-            self.board[x-1][y].count += 1
-                # if cell to the of (x,y) right is on the board and not a mine, increment its value
-        if x+1 < self.boardSize and not self.board[x+1][y].is_mine:
-            self.board[x+1][y].count += 1
+
+        # Get coordinates of neighboring cells around (x, y)
+        nearby_coords = self.nearby_coords_of(x, y)
+
+        # Increment the value of neighboring cells that are not mines
+        for nx, ny in nearby_coords:
+            if not self.board[nx][ny].is_mine:
+                self.board[nx][ny].count += 1
     def makeMove(self, x, y):
         """
         step on the cell at the requested component and reveal whether the player is still alive
