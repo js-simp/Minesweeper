@@ -260,4 +260,5 @@ def playGame():
         print("Congratulations, You Win!")
     else:
         print("You hit a mine, Game Over!")
-playGame()
+if __name__ == "__main__":
+    playGame()
