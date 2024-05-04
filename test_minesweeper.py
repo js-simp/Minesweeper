@@ -122,6 +122,27 @@ class TestMinesweeper(unittest.TestCase):
         # Assert that __str__ can draw an empty board
         self.assertEqual(str(board), expected_output)
 
+    def test_str_after_selection(self):
+        # Create a test board with no mines, make a move on an empty cell
+        board = boardClass(5, 0)
+        board.makeMove(2, 2)
+
+        expected_output = "  | 0 | 1 | 2 | 3 | 4\n" \
+                          "-----------------------\n" \
+                          "0 | 0 | 0 | 0 | 0 | 0 |\n" \
+                          "-----------------------\n" \
+                          "1 | 0 | 0 | 0 | 0 | 0 |\n" \
+                          "-----------------------\n" \
+                          "2 | 0 | 0 | 0 | 0 | 0 |\n" \
+                          "-----------------------\n" \
+                          "3 | 0 | 0 | 0 | 0 | 0 |\n" \
+                          "-----------------------\n" \
+                          "4 | 0 | 0 | 0 | 0 | 0 |\n" \
+                          "-----------------------\n"
+
+        # Assert that __str__ can draw a board after a non-mine has been selected
+        self.assertEqual(str(board), expected_output)
+
 
 if __name__ == '__main__':
     unittest.main()
