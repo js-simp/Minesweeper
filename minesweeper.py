@@ -161,19 +161,23 @@ class boardClass(object):
         """
         return self.selectableSpots == 0
     def nearby_coords_of(self, x, y):
+        """Gives the list of all valid nearby coordinates.
+
+        Args:
+            x (int): The 'x' coordinate
+            y (int): The 'y' coordinate
+
+        Returns:
+            list(tuple): List of coordinates adjacent to or diagonally next to
+            the given coordinate that are also on the board.
         """
-        gives the list of all valid nearby coordinates
-        :param x: the x component of the coordinate
-        :param y: the y component of the coordinate
-        :return: the list of coordinates adjacent to or diagonally next to the given coordinate that
-        are also on the board
-        suitable tests for board of width at least 3 would be:
-        self.assertEqual ( board.nearby_coords_of(1,1) ,
-        [(0,0), (0, 1), (0, 2), (1, 0), (1, 2), (2,0), (2,1), (2, 2) ] )
-        self.assertEqual ( board.nearby_coords_of(0,0) ,
-        [(0,1), (1,0), (1,1)] )
-        """
-        pass
+        nearby_coords = []
+        for dx in range(-1, 2):
+            for dy in range(-1, 2):
+                nx, ny = x + dx, y + dy
+                if (dx, dy) != (0, 0) and 0 <= nx < self.boardSize and 0 <= ny < self.boardSize:
+                    nearby_coords.append((nx, ny))
+        return nearby_coords
 
 def validate_coordinates_range(x, y, board_size):
     """Validate whether the (x, y) coordinates are in range.

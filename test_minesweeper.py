@@ -168,6 +168,15 @@ class TestMinesweeper(unittest.TestCase):
         # Assert that __str__ can draw a board after a mine has been selected
         self.assertEqual(str(board), expected_output)
 
+    def test_nearby_coords_of(self):
+        # Create a test board with a mine, then make a move on the mine
+        board = boardClass(5, 0)
+
+        self.assertEqual(board.nearby_coords_of(1, 1),
+                         [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)])
+        self.assertEqual(board.nearby_coords_of(0, 0),
+                         [(0, 1), (1, 0), (1, 1)])
+
 
 if __name__ == '__main__':
     unittest.main()
