@@ -36,5 +36,43 @@ class TestMinesweeper(unittest.TestCase):
         # Assert that makeMove returns False when hitting a mine
         self.assertFalse(board.makeMove(2, 2))
 
+    def test_makeMove_no_mine_hit_center(self):
+        """Test whether the `makeMove` function returns True when a mine has not been hit
+        and it clears all locations around a cell that has no mines in neighbouring cells.
+        """
+
+        # Create a board with a mine at (0,0) and select a cell near the center
+        board = boardClass(5, 0)
+        board.addMine(0, 0)
+        # Assert that makeMove returns True when the mine has not been hit
+        self.assertTrue(board.makeMove(2, 2))
+        board.makeMove(2, 2)
+
+        # Assert that makeMove returns True and clears locations around a cell with no neighboring mines
+        self.assertTrue(board.board[2][2].selected)
+        self.assertTrue(board.board[0][2].selected)
+        self.assertTrue(board.board[0][3].selected)
+        self.assertTrue(board.board[0][4].selected)
+        self.assertTrue(board.board[1][2].selected)
+        self.assertTrue(board.board[1][3].selected)
+        self.assertTrue(board.board[1][4].selected)
+        self.assertTrue(board.board[2][0].selected)
+        self.assertTrue(board.board[2][1].selected)
+        self.assertTrue(board.board[2][3].selected)
+        self.assertTrue(board.board[2][4].selected)
+        self.assertTrue(board.board[3][0].selected)
+        self.assertTrue(board.board[3][1].selected)
+        self.assertTrue(board.board[3][2].selected)
+        self.assertTrue(board.board[3][3].selected)
+        self.assertTrue(board.board[3][4].selected)
+        self.assertTrue(board.board[4][0].selected)
+        self.assertTrue(board.board[4][1].selected)
+        self.assertTrue(board.board[4][2].selected)
+        self.assertTrue(board.board[4][3].selected)
+        self.assertTrue(board.board[4][4].selected)
+
+
+
+
 if __name__ == '__main__':
     unittest.main()
