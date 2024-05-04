@@ -101,6 +101,27 @@ class TestMinesweeper(unittest.TestCase):
         self.assertTrue(board.board[4][3].selected)
         self.assertTrue(board.board[4][4].selected)
 
+    def test_str_empty_board(self):
+        # Create a test board (no mines)
+        board = boardClass(5, 0)
+
+        # Define the expected output for an empty board
+        expected_output = "  | 0 | 1 | 2 | 3 | 4\n" \
+                          "-----------------------\n" \
+                          "0 |  |  |  |  |  |\n" \
+                          "-----------------------\n" \
+                          "1 |  |  |  |  |  |\n" \
+                          "-----------------------\n" \
+                          "2 |  |  |  |  |  |\n" \
+                          "-----------------------\n" \
+                          "3 |  |  |  |  |  |\n" \
+                          "-----------------------\n" \
+                          "4 |  |  |  |  |  |\n" \
+                          "-----------------------\n"
+
+        # Assert that __str__ can draw an empty board
+        self.assertEqual(str(board), expected_output)
+
 
 if __name__ == '__main__':
     unittest.main()
