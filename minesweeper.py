@@ -45,6 +45,7 @@ class boardClass(object):
             if not self.board[x][y].is_mine:
                 self.addMine(x, y)
                 i += 1
+
     def __str__(self):
         """Returns a string representation of the board.
 
@@ -62,7 +63,6 @@ class boardClass(object):
 
         return returnString
 
-
     def _generate_divider(self):
         """Generates a string representing the divider between rows.
 
@@ -74,7 +74,6 @@ class boardClass(object):
             divider += "----"
         divider += "\n"
         return divider
-
 
     def _generate_column_headings(self):
         """Generates a string representing the column headings.
@@ -88,6 +87,7 @@ class boardClass(object):
             column_headings += " | " + str(i)
         column_headings += divider
         return column_headings
+
     def addMine(self, x, y):
         """
         Add a mine to the board at the specified coordinate and update neighboring cells.
@@ -111,40 +111,40 @@ class boardClass(object):
         for nx, ny in nearby_coords:
             if not self.board[nx][ny].is_mine:
                 self.board[nx][ny].count += 1
+
     def makeMove(self, x, y):
+        """Step on the cell at the requested component and reveal whether the player is still alive.
+
+        Args:
+            x (int): The 'x' coordinate.
+            y (int): The 'y' coordinate.
+
+        Returns:
+            bool: True if and only if (x, y) did not have a mine.
         """
-        step on the cell at the requested component and reveal whether the player is still alive
-        :param x: the x-component of the component
-        :param y: the y-component of the coordinate
-        :return: True if and only if (x,y) did not have a mine
-        """
-        # select the cell and return false if a mine has been stepped on (all other paths return True)
+        # Select the cell
         self.board[x][y].is_selected = True
         self.selectableSpots -= 1
+
+        # If the cell is a mine, return false
         if self.board[x][y].count == -1:
             return False
-        # if there are no mines around (x,y)
+
+        # If the cell has no neighboring mines, recursively visit neighboring cells
         if self.board[x][y].count == 0:
-            # examine cells to the left, centre and right of (x,y)
-            for i in range(x-1, x+2):
-                # make sure cell is not too far to the left or right
-                if i >= 0 and i < self.boardSize:
-                    # if the three cells above (x,y) are on the board and not selected, visit them
-                    if y-1 >= 0 and not self.board[i][y-1].is_selected:
-                        self.makeMove(i, y-1)
-                    # if the three cells below (x,y) are on the board and not selected, visit them
-                    if y+1 < self.boardSize and not self.board[i][y+1].is_selected:
-                        self.makeMove(i, y+1)
-                # if the cell to the left of (x,y) is on the board and not selected, visit it
-            if x-1 >= 0 and not self.board[x-1][y].is_selected:
-                self.makeMove(x-1, y)
-                # if the cell to the right of (x,y) is on the board and not selected, visit it
-            if x+1 < self.boardSize and not self.board[x+1][y].is_selected:
-                self.makeMove(x+1, y)
-        # only False case is when value is -1 and that was detailed above
+            # Get neighboring coordinates
+            nearby_coords = self.nearby_coords_of(x, y)
+            # Visit each neighboring cell
+            for nx, ny in nearby_coords:
+                # Visit the cell only if it's within the board boundaries and not already selected
+                if 0 <= nx < self.boardSize and 0 <= ny < self.boardSize and not self.board[nx][ny].is_selected:
+                    self.makeMove(nx, ny)
+
+            # If the cell is not a mine and not empty, return true
             return True
         else:
             return True
+
     def hitMine(self, x, y):
         """
         reveals whether a particular location holds a mine
@@ -153,12 +153,14 @@ class boardClass(object):
         :return: True if and only if (x,y) is a mine
         """
         return self.board[x][y].count == -1
+
     def isWinner(self):
         """
         reveals whether the player has won
         :return: True if and only if the player has won
         """
         return self.selectableSpots == 0
+
     def nearby_coords_of(self, x, y):
         """Gives the list of all valid nearby coordinates.
 
