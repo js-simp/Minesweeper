@@ -176,6 +176,24 @@ def validate_coordinates_range(x, y, board_size):
         y = int(input("y: "))
     return x, y
 
+def validate_unselected(x, y, board):
+    """Validate whether the (x, y) coordinates denote an unselected location.
+
+    Args:
+        x (int): the 'x' coordinate
+        y (int): the 'y' coordinate
+        board (boardClass): board object
+
+    Returns:
+        int, int: validated (x,y) coordinates
+    """
+    while board[x][y].selected:
+        print("Spot already selected. Please choose an unselected spot.")
+        x = int(input("x: "))
+        y = int(input("y: "))
+    return x, y
+
+
 def playGame():
     board_size = int(input("Choose the width of the board: "))
     numMines = int(input("Choose the number of mines: "))
@@ -186,9 +204,15 @@ def playGame():
     while not game_over:
         print(board)
         print("Make your move:")
+        # Get the (x, y) coordinates from user input and validate
         x = int(input("x: "))
         y = int(input("y: "))
         x, y = validate_coordinates_range(x, y, board_size)
+
+        # Validate whether the spot at (x, y) is unselected
+        x, y = validate_unselected(x, y, board.board)
+
+        #Make the move
         board.makeMove(x, y)
         game_over = board.hitMine(x, y)
         if board.isWinner() and game_over == False:
