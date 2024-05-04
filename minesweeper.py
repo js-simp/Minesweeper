@@ -46,35 +46,48 @@ class boardClass(object):
                 self.addMine(x, y)
                 i += 1
     def __str__(self):
-        # make divider be 3 -s plus 4 -s for each cell
-        # with a new line both before and after the divider
-        # make returnString be a row labelling each column followed by a divider
-        returnString = " "
-        divider = "\n---"
+        """Returns a string representation of the board.
 
-        for i in range(0, self.boardSize):
-            returnString += " | " + str(i)
+        Returns:
+            str:  string representation of the board
+        """
+        returnString = self._generate_column_headings()
+        divider = self._generate_divider()
+
+        for y in range(self.boardSize):
+            returnString += str(y)
+            for x in range(self.boardSize):
+                returnString += " | " + str(self.board[x][y])
+            returnString += " |" + divider
+
+        return returnString
+
+
+    def _generate_divider(self):
+        """Generates a string representing the divider between rows.
+
+        Returns:
+            str:  the divider between rows
+        """
+        divider = "\n---"
+        for i in range(self.boardSize):
             divider += "----"
         divider += "\n"
-        returnString += divider
-        # for each row of the table, add onto the return string ...
-        # the number of the row and a representation for each cell (then right edge and divider)
-        # which is * for a selected cell with a mine, blank for an unselected cell
-        # and otherwise (selected cell without mine) the number of neighbours with mines
-        # change: -1 has been replaced with * as it is more visually attractive
-        # criticism: displaying the cell should be the responsibility of boardSpot
-        for y in range(0, self.boardSize):
-            returnString += str(y)
-            for x in range(0, self.boardSize):
-                if self.board[x][y].is_mine and self.board[x][y].is_selected:
-                    returnString += " |" + " *"
-                elif self.board[x][y].is_selected:
-                    returnString += " | " + str(self.board[x][y].count)
-                else:
-                    returnString += " | "
-            returnString += " |"
-            returnString += divider
-        return returnString
+        return divider
+
+
+    def _generate_column_headings(self):
+        """Generates a string representing the column headings.
+
+        Returns:
+            str:  string representation of the column headings
+        """
+        column_headings = " "
+        divider = self._generate_divider()
+        for i in range(self.boardSize):
+            column_headings += " | " + str(i)
+        column_headings += divider
+        return column_headings
     def addMine(self, x, y):
         """
         add a mine to the board at the requested coordinate
