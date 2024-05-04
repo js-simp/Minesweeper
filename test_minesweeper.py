@@ -143,6 +143,31 @@ class TestMinesweeper(unittest.TestCase):
         # Assert that __str__ can draw a board after a non-mine has been selected
         self.assertEqual(str(board), expected_output)
 
+    def test_str_after_mine_hit(self):
+        """Test whether the __str__ function can draw a board after a mine has been hit.
+        """
+
+        # Create a test board with a mine, then make a move on the mine
+        board = boardClass(5, 0)
+        board.addMine(2, 2)
+        board.makeMove(2, 2)
+
+        expected_output = "  | 0 | 1 | 2 | 3 | 4\n" \
+                          "-----------------------\n" \
+                          "0 |  |  |  |  |  |\n" \
+                          "-----------------------\n" \
+                          "1 |  |  |  |  |  |\n" \
+                          "-----------------------\n" \
+                          "2 |  |  | * |  |  |\n" \
+                          "-----------------------\n" \
+                          "3 |  |  |  |  |  |\n" \
+                          "-----------------------\n" \
+                          "4 |  |  |  |  |  |\n" \
+                          "-----------------------\n"
+
+        # Assert that __str__ can draw a board after a mine has been selected
+        self.assertEqual(str(board), expected_output)
+
 
 if __name__ == '__main__':
     unittest.main()
