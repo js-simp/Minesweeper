@@ -1,16 +1,18 @@
 import unittest
-from minesweeper import boardClass
+from minesweeper import BoardClass
+
 
 class TestMinesweeper(unittest.TestCase):
+
     def test_addMine(self):
         """Test whether the `addMine` function adds a mine in the specified place
         and increases the value stored at every neighbouring cell.
         """
         # Create a test board without any mines
-        board = boardClass(5, 0)
+        board = BoardClass(5, 0)
 
         # Add a mine at position (2, 2)
-        board.addMine(2, 2)
+        board.add_mine(2, 2)
 
         # Assert that the value at (2, 2) is -1 (mine)is_
         self.assertEqual(board.board[2][2].count, -1)
@@ -30,11 +32,11 @@ class TestMinesweeper(unittest.TestCase):
         """
 
         # Create test board and add a mine at position (2, 2)
-        board = boardClass(5, 0)
-        board.addMine(2, 2)
+        board = BoardClass(5, 0)
+        board.add_mine(2, 2)
 
         # Assert that makeMove returns False when hitting a mine
-        self.assertFalse(board.makeMove(2, 2))
+        self.assertFalse(board.make_move(2, 2))
 
     def test_makeMove_no_mine_hit_center(self):
         """Test whether the `makeMove` function returns True when a mine has not been hit
@@ -42,11 +44,11 @@ class TestMinesweeper(unittest.TestCase):
         """
 
         # Create a board with a mine at (0,0) and select a cell near the center
-        board = boardClass(5, 0)
-        board.addMine(0, 0)
+        board = BoardClass(5, 0)
+        board.add_mine(0, 0)
         # Assert that makeMove returns True when the mine has not been hit
-        self.assertTrue(board.makeMove(2, 2))
-        board.makeMove(2, 2)
+        self.assertTrue(board.make_move(2, 2))
+        board.make_move(2, 2)
 
         # Assert that makeMove returns True and clears locations around a cell with no neighboring mines
         self.assertTrue(board.board[2][2].is_selected)
@@ -77,11 +79,11 @@ class TestMinesweeper(unittest.TestCase):
         """
 
         # Create a board with a mine at (2,2) and select a cell at the edge of the board
-        board = boardClass(5, 0)
-        board.addMine(2, 2)
+        board = BoardClass(5, 0)
+        board.add_mine(2, 2)
         # Assert that makeMove returns True when the mine has not been hit
-        self.assertTrue(board.makeMove(0, 2))
-        board.makeMove(0, 2)
+        self.assertTrue(board.make_move(0, 2))
+        board.make_move(0, 2)
 
         # Assert that makeMove returns True and clears locations around a cell with no neighboring mines
         self.assertTrue(board.board[0][2].is_selected)
@@ -103,7 +105,7 @@ class TestMinesweeper(unittest.TestCase):
 
     def test_str_empty_board(self):
         # Create a test board (no mines)
-        board = boardClass(5, 0)
+        board = BoardClass(5, 0)
 
         # Define the expected output for an empty board
         expected_output = "  | 0 | 1 | 2 | 3 | 4\n" \
@@ -124,8 +126,8 @@ class TestMinesweeper(unittest.TestCase):
 
     def test_str_after_selection(self):
         # Create a test board with no mines, make a move on an empty cell
-        board = boardClass(5, 0)
-        board.makeMove(2, 2)
+        board = BoardClass(5, 0)
+        board.make_move(2, 2)
 
         expected_output = "  | 0 | 1 | 2 | 3 | 4\n" \
                           "-----------------------\n" \
@@ -148,9 +150,9 @@ class TestMinesweeper(unittest.TestCase):
         """
 
         # Create a test board with a mine, then make a move on the mine
-        board = boardClass(5, 0)
-        board.addMine(2, 2)
-        board.makeMove(2, 2)
+        board = BoardClass(5, 0)
+        board.add_mine(2, 2)
+        board.make_move(2, 2)
 
         expected_output = "  | 0 | 1 | 2 | 3 | 4\n" \
                           "-----------------------\n" \
@@ -170,7 +172,7 @@ class TestMinesweeper(unittest.TestCase):
 
     def test_nearby_coords_of(self):
         # Create a test board with a mine, then make a move on the mine
-        board = boardClass(5, 0)
+        board = BoardClass(5, 0)
 
         self.assertEqual(board.nearby_coords_of(1, 1),
                          [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)])

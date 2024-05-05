@@ -1,7 +1,8 @@
 import random
 
+
 # criticism: the prefix board is redundant
-class boardSpot(object):
+class BoardSpot(object):
     def __init__(self):
         self.is_selected = False
         self.is_mine = False
@@ -16,7 +17,7 @@ class boardSpot(object):
         else:
             return " "
 
-    def isMine(self):
+    def is_mine(self):
         """Determines whether or not the board spot contains a mine.
 
         Returns:
@@ -24,26 +25,26 @@ class boardSpot(object):
         """
         return self.is_mine
 
+
 # criticism: the suffix Class is redundant
-class boardClass(object):
-    # criticism: the convention of using prefix m_ to indicate method parameters is no longer used
-    def __init__(self, m_boardSize, m_numMines):
-        self.board = [[boardSpot() for i in range(m_boardSize)] for j in range(m_boardSize)]
-        self.boardSize = m_boardSize
-        self.numMines = m_numMines
+class BoardClass(object):
+    def __init__(self, board_size, num_mines):
+        self.board = [[BoardSpot() for _ in range(board_size)] for _ in range(board_size)]
+        self.boardSize = board_size
+        self.numMines = num_mines
         # selectableSpots is the number of cells without a mine
-        # when this is 0, the game is over and the mine field has been cleared
-        self.selectableSpots = m_boardSize * m_boardSize - m_numMines
+        # when this is 0, the game is over and the minefield has been cleared
+        self.selectableSpots = board_size * board_size - num_mines
         # lay m_numMines mines randomly on the board ...
         # taking care not to lay a mine on a cell that already has a mine
         # change: else case where i is reduced has been removed ...
         # as this causes infinite loops behaviour when the number of mines is relatively large
-        i=0
-        while i < m_numMines:
-            x = random.randint(0, self.boardSize-1)
-            y = random.randint(0, self.boardSize-1)
+        i = 0
+        while i < num_mines:
+            x = random.randint(0, self.boardSize - 1)
+            y = random.randint(0, self.boardSize - 1)
             if not self.board[x][y].is_mine:
-                self.addMine(x, y)
+                self.add_mine(x, y)
                 i += 1
 
     def __str__(self):
@@ -52,16 +53,16 @@ class boardClass(object):
         Returns:
             str:  string representation of the board
         """
-        returnString = self._generate_column_headings()
+        return_string = self._generate_column_headings()
         divider = self._generate_divider()
 
         for y in range(self.boardSize):
-            returnString += str(y)
+            return_string += str(y)
             for x in range(self.boardSize):
-                returnString += " | " + str(self.board[x][y])
-            returnString += " |" + divider
+                return_string += " | " + str(self.board[x][y])
+            return_string += " |" + divider
 
-        return returnString
+        return return_string
 
     def _generate_divider(self):
         """Generates a string representing the divider between rows.
@@ -88,7 +89,7 @@ class boardClass(object):
         column_headings += divider
         return column_headings
 
-    def addMine(self, x, y):
+    def add_mine(self, x, y):
         """
         Add a mine to the board at the specified coordinate and update neighboring cells.
 
@@ -112,7 +113,7 @@ class boardClass(object):
             if not self.board[nx][ny].is_mine:
                 self.board[nx][ny].count += 1
 
-    def makeMove(self, x, y):
+    def make_move(self, x, y):
         """Step on the cell at the requested component and reveal whether the player is still alive.
 
         Args:
@@ -138,14 +139,14 @@ class boardClass(object):
             for nx, ny in nearby_coords:
                 # Visit the cell only if it's within the board boundaries and not already selected
                 if 0 <= nx < self.boardSize and 0 <= ny < self.boardSize and not self.board[nx][ny].is_selected:
-                    self.makeMove(nx, ny)
+                    self.make_move(nx, ny)
 
             # If the cell is not a mine and not empty, return true
             return True
         else:
             return True
 
-    def hitMine(self, x, y):
+    def hit_mine(self, x, y):
         """
         reveals whether a particular location holds a mine
         :param x: the x-component of the location
@@ -154,7 +155,7 @@ class boardClass(object):
         """
         return self.board[x][y].count == -1
 
-    def isWinner(self):
+    def is_winner(self):
         """
         reveals whether the player has won
         :return: True if and only if the player has won
@@ -180,6 +181,7 @@ class boardClass(object):
                     nearby_coords.append((nx, ny))
         return nearby_coords
 
+
 def validate_coordinates_range(x, y, board_size):
     """Validate whether the (x, y) coordinates are in range.
 
@@ -197,13 +199,14 @@ def validate_coordinates_range(x, y, board_size):
         y = int(input("y: "))
     return x, y
 
+
 def validate_unselected(x, y, board):
     """Validate whether the (x, y) coordinates denote an unselected location.
 
     Args:
         x (int): the 'x' coordinate
         y (int): the 'y' coordinate
-        board (boardClass): board object
+        board (BoardClass): board object
 
     Returns:
         int, int: validated (x,y) coordinates
@@ -213,6 +216,7 @@ def validate_unselected(x, y, board):
         x = int(input("x: "))
         y = int(input("y: "))
     return x, y
+
 
 def validate_board_width(width):
     """Validate the board width.
@@ -227,7 +231,6 @@ def validate_board_width(width):
         print("Board width should be at least 3 for a playable game.")
         width = int(input("Choose the width of the board: "))
     return width
-
 
 
 def validate_num_mines(num_mines, board_size):
@@ -246,7 +249,7 @@ def validate_num_mines(num_mines, board_size):
     return num_mines
 
 
-def playGame():
+def play_game():
     # Get the board width from user input and validate
     board_size = int(input("Choose the width of the board: "))
     board_size = validate_board_width(board_size)
@@ -258,7 +261,7 @@ def playGame():
     game_over = False
     winner = False
 
-    board = boardClass(board_size, num_mines)
+    board = BoardClass(board_size, num_mines)
     while not game_over:
         print(board)
         print("Make your move:")
@@ -270,10 +273,10 @@ def playGame():
         # Validate whether the spot at (x, y) is unselected
         x, y = validate_unselected(x, y, board.board)
 
-        #Make the move
-        board.makeMove(x, y)
-        game_over = board.hitMine(x, y)
-        if board.isWinner() and game_over == False:
+        # Make the move
+        board.make_move(x, y)
+        game_over = board.hit_mine(x, y)
+        if board.is_winner() and not game_over:
             game_over = True
             winner = True
     print(board)
@@ -281,5 +284,7 @@ def playGame():
         print("Congratulations, You Win!")
     else:
         print("You hit a mine, Game Over!")
+
+
 if __name__ == "__main__":
-    playGame()
+    play_game()
