@@ -1,5 +1,5 @@
 import unittest
-from minesweeper import Board
+from board import Board
 
 
 class TestMinesweeper(unittest.TestCase):
@@ -171,11 +171,17 @@ class TestMinesweeper(unittest.TestCase):
         self.assertEqual(str(board), expected_output)
 
     def test_nearby_coords_of(self):
-        # Create a test board with a mine, then make a move on the mine
+        # Create a test board
         board = Board(5, 0)
-
+        """Test whether the `nearby_coords_of` function returns correct neighboring coordinates
+                for a cell in the center of the board.
+                """
         self.assertEqual(board.nearby_coords_of(1, 1),
                          [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)])
+
+        """Test whether the `nearby_coords_of` function returns correct neighboring coordinates
+                for a cell at the corner of the board.
+                """
         self.assertEqual(board.nearby_coords_of(0, 0),
                          [(0, 1), (1, 0), (1, 1)])
 
