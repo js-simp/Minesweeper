@@ -1,8 +1,7 @@
 import random
 
 
-# criticism: the prefix board is redundant
-class BoardSpot(object):
+class Spot(object):
     def __init__(self):
         self.is_selected = False
         self.is_mine = False
@@ -26,10 +25,9 @@ class BoardSpot(object):
         return self.is_mine
 
 
-# criticism: the suffix Class is redundant
-class BoardClass(object):
+class Board(object):
     def __init__(self, board_size, num_mines):
-        self.board = [[BoardSpot() for _ in range(board_size)] for _ in range(board_size)]
+        self.board = [[Spot() for _ in range(board_size)] for _ in range(board_size)]
         self.boardSize = board_size
         self.numMines = num_mines
         # selectableSpots is the number of cells without a mine
@@ -206,7 +204,7 @@ def validate_unselected(x, y, board):
     Args:
         x (int): the 'x' coordinate
         y (int): the 'y' coordinate
-        board (BoardClass): board object
+        board (Board): board object
 
     Returns:
         int, int: validated (x,y) coordinates
@@ -261,7 +259,7 @@ def play_game():
     game_over = False
     winner = False
 
-    board = BoardClass(board_size, num_mines)
+    board = Board(board_size, num_mines)
     while not game_over:
         print(board)
         print("Make your move:")

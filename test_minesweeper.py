@@ -1,5 +1,5 @@
 import unittest
-from minesweeper import BoardClass
+from minesweeper import Board
 
 
 class TestMinesweeper(unittest.TestCase):
@@ -9,7 +9,7 @@ class TestMinesweeper(unittest.TestCase):
         and increases the value stored at every neighbouring cell.
         """
         # Create a test board without any mines
-        board = BoardClass(5, 0)
+        board = Board(5, 0)
 
         # Add a mine at position (2, 2)
         board.add_mine(2, 2)
@@ -32,7 +32,7 @@ class TestMinesweeper(unittest.TestCase):
         """
 
         # Create test board and add a mine at position (2, 2)
-        board = BoardClass(5, 0)
+        board = Board(5, 0)
         board.add_mine(2, 2)
 
         # Assert that makeMove returns False when hitting a mine
@@ -44,7 +44,7 @@ class TestMinesweeper(unittest.TestCase):
         """
 
         # Create a board with a mine at (0,0) and select a cell near the center
-        board = BoardClass(5, 0)
+        board = Board(5, 0)
         board.add_mine(0, 0)
         # Assert that makeMove returns True when the mine has not been hit
         self.assertTrue(board.make_move(2, 2))
@@ -79,7 +79,7 @@ class TestMinesweeper(unittest.TestCase):
         """
 
         # Create a board with a mine at (2,2) and select a cell at the edge of the board
-        board = BoardClass(5, 0)
+        board = Board(5, 0)
         board.add_mine(2, 2)
         # Assert that makeMove returns True when the mine has not been hit
         self.assertTrue(board.make_move(0, 2))
@@ -105,7 +105,7 @@ class TestMinesweeper(unittest.TestCase):
 
     def test_str_empty_board(self):
         # Create a test board (no mines)
-        board = BoardClass(5, 0)
+        board = Board(5, 0)
 
         # Define the expected output for an empty board
         expected_output = "  | 0 | 1 | 2 | 3 | 4\n" \
@@ -126,7 +126,7 @@ class TestMinesweeper(unittest.TestCase):
 
     def test_str_after_selection(self):
         # Create a test board with no mines, make a move on an empty cell
-        board = BoardClass(5, 0)
+        board = Board(5, 0)
         board.make_move(2, 2)
 
         expected_output = "  | 0 | 1 | 2 | 3 | 4\n" \
@@ -150,7 +150,7 @@ class TestMinesweeper(unittest.TestCase):
         """
 
         # Create a test board with a mine, then make a move on the mine
-        board = BoardClass(5, 0)
+        board = Board(5, 0)
         board.add_mine(2, 2)
         board.make_move(2, 2)
 
@@ -172,7 +172,7 @@ class TestMinesweeper(unittest.TestCase):
 
     def test_nearby_coords_of(self):
         # Create a test board with a mine, then make a move on the mine
-        board = BoardClass(5, 0)
+        board = Board(5, 0)
 
         self.assertEqual(board.nearby_coords_of(1, 1),
                          [(0, 0), (0, 1), (0, 2), (1, 0), (1, 2), (2, 0), (2, 1), (2, 2)])
